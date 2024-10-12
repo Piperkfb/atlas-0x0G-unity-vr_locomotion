@@ -15,12 +15,13 @@ public class SimpleShoot : MonoBehaviour
     public GameObject muzzleFlashPrefab;
 
     [Header("Location Refrences")]
-    [SerializeField] private Animator gunAnimator;
+    [SerializeField] public Animator gunAnimator;
     [SerializeField] private Transform barrelLocation;
     [SerializeField] private Transform casingExitLocation;
 
     [Header("Settings")]
     [Tooltip("Specify time to destory the casing object")] [SerializeField] private float destroyTimer = 2f;
+    [Tooltip("Specify time to destory the casing object")] [SerializeField] private float bulletdestTimer = 7f;
     [Tooltip("Bullet Speed")] [SerializeField] private float shotPower = 500f;
     [Tooltip("Casing Ejection Speed")] [SerializeField] private float ejectPower = 150f;
 
@@ -33,14 +34,6 @@ public class SimpleShoot : MonoBehaviour
         if (barrelLocation == null)
             barrelLocation = transform;
 
-        if (gunAnimator == null)
-            gunAnimator = GetComponentInChildren<Animator>();
-        
-        //Grab.activated.AddListener(OnActivate);
-    }
-    void OnActivate(ActivateEventArgs args)
-    {
-        //Shoot();  // Call the shoot function when activated
     }
 
     void Update()
@@ -66,9 +59,13 @@ public class SimpleShoot : MonoBehaviour
         { return; }
 
         // Create a bullet and add force on it in direction of the barrel
-        Instantiate(bulletPrefab, barrelLocation.position, barrelLocation.rotation).GetComponent<Rigidbody>().AddForce(barrelLocation.forward * shotPower);
+        GameObject flyingBullet = Instantiate(bulletPrefab, barrelLocation.position, barrelLocation.rotation);
+        Rigidbody bulletBody = flyingBullet.GetComponent<Rigidbody>();
+        bulletBody.AddForce(barrelLocation.forward * shotPower);
         gunAnimator.SetTrigger("Fire");
-        //Invoke(nameof(ResetHasShot), 0.5f);
+
+        //destory bullet after time
+        Destroy(flyingBullet, bulletdestTimer);
         
     }
 
@@ -92,8 +89,5 @@ public class SimpleShoot : MonoBehaviour
         Destroy(tempCasing, destroyTimer);
     }
 
-    public void ResetHasShot()
-    {
-        hasshot = false;
-    }
+
 }
