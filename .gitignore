@@ -72,3 +72,4 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 Night At The Rave 2/Library/ArtifactDB
 Night At The Rave 2/Library/ArtifactDB-lock
+Night At The Rave 2/Library/PackageCache/com.unity.burst@1.8.17/.Runtime/libburst-llvm-16.dylib
