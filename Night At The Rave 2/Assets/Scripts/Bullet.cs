@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
 {   
     public GameObject BloodPart;
     private GameObject BloodSplatter;
-    public ZombieScript ZombieScript;
+    //public ZombieScript ZombieScript;
 
 
 
@@ -21,11 +21,12 @@ public class Bullet : MonoBehaviour
         GameObject collider = Trigger.gameObject;
         if (collider.CompareTag("Zombie Head"))
         {
+            ZombieScript ZomScript = collider.GetComponentInParent<ZombieScript>();
             //headshot
             Debug.Log("HeadShot");
             //send damage data
-            ZombieScript.ZHealth -= 50f;
-            ZombieScript.BulletHit();
+            ZomScript.ZHealth -= 50f;
+            ZomScript.BulletHit();
             //blood effect from location of bullet //want instantize
             Transform location = transform;
             BloodSplatter = Instantiate(BloodPart, location.position, Quaternion.identity);
@@ -37,11 +38,12 @@ public class Bullet : MonoBehaviour
         }
         else if (collider.CompareTag("Zombie Body"))
         {
+            ZombieScript ZomScript = collider.GetComponentInParent<ZombieScript>();
             //body shot
             Debug.Log("BodyShot");
             //Send damage data
-            ZombieScript.ZHealth -= 10f;
-            ZombieScript.BulletHit();
+            ZomScript.ZHealth -= 10f;
+            ZomScript.BulletHit();
             //blood effect from location of bullet
             Transform location = transform;
             BloodSplatter = Instantiate(BloodPart, location.position, Quaternion.identity);

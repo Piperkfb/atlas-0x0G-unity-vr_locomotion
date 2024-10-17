@@ -17,6 +17,7 @@ public class ZombieScript : MonoBehaviour
     public bool isDead = false;
     public bool isInRange = false;
     public bool isCoroutineRunning = false;
+    public float rotationSpeed = 5f;
 
     void Start()
     {
@@ -47,8 +48,17 @@ public class ZombieScript : MonoBehaviour
             ZomDead();
             //ragdoll?
         }
-    }
 
+            // Calculate the direction from the zombie to the player
+            Vector3 directionToPlayer = Player.position - transform.position;
+            directionToPlayer.y = 0;  // Keep the rotation on the horizontal plane
+
+            // Get the target rotation
+            Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+
+            // Smoothly rotate towards the player
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
     public void ZomDead()
     {
         //set death flag
@@ -56,6 +66,7 @@ public class ZombieScript : MonoBehaviour
         //death animation
         anime.SetBool("Dead", true);
         StartCoroutine("DeadDespawn");
+        Agent.isStopped = true;
         
     }
     public void BulletHit()
@@ -85,7 +96,6 @@ public class ZombieScript : MonoBehaviour
             if (isAttacked == true)
             {
                 //damage player
-                Debug.Log("Ouch!");
                 gameManager.PlayerHealth -= 1; 
                 gameManager.PlayerDamage();
                 Debug.Log(gameManager.PlayerHealth);
